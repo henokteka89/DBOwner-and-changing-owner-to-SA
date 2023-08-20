@@ -1,0 +1,19 @@
+---To know the current database owner
+Select name, 
+Suser_sname (owner_sid) AS DBOwnername
+From master.sys.databases
+
+--- To change owner to SA  in single database
+
+Use [DBNAME]
+Go
+Exec Sp_changedbowner 'SA'
+
+--- To change all databases with non "SA" owners: the below script gives you the query to change all databases (copy-paste and run)
+
+use master
+go
+select 'use [' + db.name+']; exec sp_changedbowner [sa];' from 
+sys.databases db left join sys.server_principals sp
+on db.owner_sid=sp.sid
+where sp.name <>'sa'
