@@ -1,3 +1,5 @@
+*/Additional source - From <https://www.sqlshack.com/different-ways-to-change-database-owners-in-sql-server/> "/*
+
 ---To know the current database owner
 Select name, 
 Suser_sname (owner_sid) AS DBOwnername
