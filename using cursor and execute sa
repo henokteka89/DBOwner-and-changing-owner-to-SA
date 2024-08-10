@@ -1,0 +1,29 @@
+declare @authorization_sa table (command nvarchar(500))
+insert into @authorization_sa
+select 'ALTER AUTHORIZATION ON DATABASE::' +
+name + ' to' + ' SA'
+from 
+sys.databases
+where name not in ('master', 'model', 'tempdb', 'msdb', 'distribution')
+ 
+--select * from @killcommand
+
+declare @sqlcommand nvarchar (500)
+
+DECLARE authorization_sa CURSOR FOR 
+select command from @authorization_sa
+
+open authorization_sa 
+
+fetch next from authorization_sa into @sqlcommand
+
+while @@FETCH_STATUS = 0
+begin
+exec sp_executesql @sqlcommand
+fetch next from authorization_sa into @sqlcommand
+end
+
+close authorization_sa
+deallocate authorization_sa
+
+ 
